@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Sign Up</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="form-section"
+         style="
+         max-width:500px;
+         margin:80px auto;
+         ">
+
+        <h1 style="text-align:center;">
+            ⚡ Energy Optimizer
+        </h1>
+
+        <br>
+
+        <h2 style="text-align:center;">
+            Create Account
+        </h2>
+
+        <br>
+
+        <form method="POST">
+
+            <label>Username</label>
+
+            <input
+                type="text"
+                name="username"
+                required
+            >
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                required
+            >
+
+            <button
+                type="submit"
+                style="width:100%;">
+
+                Create Account
+
+            </button>
+
+        </form>
+
+        <br>
+
+        <p style="text-align:center;">
+
+            Already have an account?
+
+            <a href="/login">
+                Login
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

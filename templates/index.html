@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Energy Forecasting Platform</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h1>Industrial Energy Forecasting Platform</h1>
+
+    <div style="margin-top:10px;">
+        <a href="/"
+           style="color:white;text-decoration:none;margin-right:20px;">
+            Dashboard
+        </a>
+
+        <a href="/upload"
+           style="color:white;text-decoration:none;">
+            Bulk Prediction
+        </a>
+        <a href="/logout"
+   style="
+   color:#ef4444;
+   text-decoration:none;
+   margin-left:20px;
+   font-weight:bold;">
+   Logout
+</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Dashboard Cards -->
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>📊 Total Predictions</h3>
+            <p>{{ total_predictions }}</p>
+        </div>
+
+        <div class="card">
+            <h3>⚡ Average Consumption</h3>
+            <p>{{ avg_consumption }} kWh</p>
+        </div>
+
+        <div class="card">
+            <h3>Maximum Consumption</h3>
+            <p>{{ max_consumption }} kWh</p>
+        </div>
+
+        <div class="card">
+            <h3>Minimum Consumption</h3>
+            <p>{{ min_consumption }} kWh</p>
+        </div>
+
+        <div class="card">
+            <h3>💰 Total Cost</h3>
+            <p>₹{{ total_cost }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Current Prediction</h3>
+            <p>
+                {% if prediction %}
+                    {{ prediction }}
+                {% else %}
+                    0
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>📈 Efficiency Score</h3>
+            <p>
+                {% if efficiency %}
+                    {{ efficiency }}%
+                {% else %}
+                    0%
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>🚨 Anomalies Detected</h3>
+            <p>{{ anomaly_count }}</p>
+        </div>
+
+    </div>
+
+    <!-- Alert Banner -->
+
+    {% if latest_anomaly %}
+
+    <div class="form-section"
+         style="background:#ffe5e5;
+                border-left:6px solid red;">
+
+        <h2 style="color:red;">
+            ⚠ Energy Alert
+        </h2>
+
+        <p>
+            {{ latest_anomaly }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+    <div class="form-section">
+
+    <h2>Machine Monitoring Dashboard</h2>
+
+    <br>
+
+    <div class="dashboard">
+
+        {% for machine, data in machines.items() %}
+
+        <div class="card">
+
+            <h3>🏭 {{ machine }}</h3>
+
+<p>⚡ {{ data.prediction }} kWh</p>
+
+<br>
+
+<p>💰 ₹{{ data.cost }}</p>
+
+<br>
+
+<p>
+    {% if data.status == "Anomaly Detected" %}
+        Health: 55%
+    {% else %}
+        Health: 92%
+    {% endif %}
+</p>
+            <br>
+
+            {% if data.status ==
+            "Anomaly Detected" %}
+
+                <span class="status-anomaly">
+🔴 Anomaly
+</span>
+
+            {% else %}
+
+                <span class="status-normal">
+🟢 Normal
+</span>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+    <!-- Prediction Form -->
+
+    <div class="form-section">
+
+        <h2>Energy Consumption Prediction</h2>
+
+        <br>
+
+        <form method="POST">
+
+            <label>Machine</label>
+
+<select name="machine_name" required>
+
+    <option value="Machine A">
+        Machine A
+    </option>
+
+    <option value="Machine B">
+        Machine B
+    </option>
+
+    <option value="Machine C">
+        Machine C
+    </option>
+
+</select>
+
+            <label>Temperature (°C)</label>
+
+            <input
+                type="number"
+                step="0.1"
+                name="temperature"
+                placeholder="Enter Temperature"
+                required>
+
+            <label>Humidity (%)</label>
+
+            <input
+                type="number"
+                step="0.1"
+                name="humidity"
+                placeholder="Enter Humidity"
+                required>
+
+            <label>Production Load (%)</label>
+
+            <input
+                type="number"
+                step="0.1"
+                name="load"
+                placeholder="Enter Production Load"
+                required>
+
+            <button type="submit">
+                Predict Energy Consumption
+            </button>
+
+        </form>
+
+        {% if prediction %}
+
+        <div class="result">
+
+            <h2>
+                Predicted Energy Consumption:
+                {{ prediction }} kWh
+            </h2>
+
+            <br>
+
+            <h3>
+                Estimated Cost:
+                ₹{{ cost }}
+            </h3>
+
+        </div>
+
+        <div class="recommendation">
+
+            <h3>Recommendation</h3>
+
+            <p>
+                {{ recommendation }}
+            </p>
+
+        </div>
+        <br>
+
+<a href="/generate_report">
+
+    <button
+        style="
+        background:#0f766e;
+        color:white;
+        padding:12px 20px;
+        border:none;
+        border-radius:8px;
+        cursor:pointer;
+        font-weight:bold;
+        ">
+
+        📄 Download PDF Report
+
+    </button>
+
+</a>
+
+        {% endif %}
+
+    </div>
+
+    <!-- Prediction History -->
+
+    <div class="form-section">
+
+        <h2>Recent Prediction History</h2>
+
+        <br>
+
+        <table>
+
+            <tr>
+                <th>ID</th>
+                <th>Temperature</th>
+                <th>Humidity</th>
+                <th>Load</th>
+                <th>Prediction (kWh)</th>
+                <th>Cost (₹)</th>
+                <th>Status</th>
+            </tr>
+
+            {% for row in history %}
+
+            <tr>
+
+                <td>{{ row.id }}</td>
+                <td>{{ row.temperature }}</td>
+                <td>{{ row.humidity }}</td>
+                <td>{{ row.load }}</td>
+                <td>{{ row.prediction }}</td>
+                <td>{{ row.cost }}</td>
+
+                <td>
+
+                    {% if row.anomaly_status == "Anomaly Detected" %}
+
+                        <span style="
+                        background:red;
+                        color:white;
+                        padding:6px 12px;
+                        border-radius:6px;">
+                            Anomaly
+                        </span>
+
+                    {% else %}
+
+                        <span style="
+                        background:green;
+                        color:white;
+                        padding:6px 12px;
+                        border-radius:6px;">
+                            Normal
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <!-- Trend Graph -->
+
+    <!-- Alert Center -->
+
+<div class="form-section">
+
+<h2>⚠ Alert Center</h2>
+
+<br>
+
+{% if anomaly_count > 0 %}
+
+<div class="alert-danger">
+
+    {{ anomaly_count }}
+    anomaly event(s) detected.
+
+</div>
+
+{% else %}
+
+<div class="alert-success">
+
+    All monitored machines are operating normally.
+
+</div>
+
+{% endif %}
+
+</div>
+
+<!-- Trend Graph -->
+
+<div class="form-section">
+
+    <h2>📈 Energy Consumption Trend</h2>
+
+   <div id="chart"></div>
+
+<br><br>
+
+<div id="cost_chart"></div>
+
+<br><br>
+
+<div id="machine_chart"></div>
+
+</div>
+
+</div>
+
+<script>
+
+var graph =
+{{ graph_json | safe }};
+
+Plotly.newPlot(
+    "chart",
+    graph.data,
+    graph.layout
+);
+
+var costGraph =
+{{ cost_graph_json | safe }};
+
+Plotly.newPlot(
+    "cost_chart",
+    costGraph.data,
+    costGraph.layout
+);
+
+var machineGraph =
+{{ machine_graph_json | safe }};
+
+Plotly.newPlot(
+    "machine_chart",
+    machineGraph.data,
+    machineGraph.layout
+);
+
+</script>
+
+</body>
+
+</html>

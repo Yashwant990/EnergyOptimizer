@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="form-section"
+         style="
+         max-width:500px;
+         margin:80px auto;
+         ">
+
+        <h1 style="text-align:center;">
+            ⚡ Energy Optimizer
+        </h1>
+
+        <br>
+
+        <h2 style="text-align:center;">
+            Login
+        </h2>
+
+        <br>
+
+{% if error %}
+
+<div style="
+background:#7f1d1d;
+color:white;
+padding:12px;
+border-radius:8px;
+margin-bottom:15px;
+text-align:center;
+">
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+        <br>
+
+        <form method="POST">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+    type="password"
+    name="password"
+    id="password"
+    required
+>
+
+<br>
+
+<label>
+
+    <input
+        type="checkbox"
+        onclick="togglePassword()"
+    >
+
+    Show Password
+
+</label>
+
+            <button
+                type="submit"
+                style="width:100%;">
+
+                Login
+
+            </button>
+
+        </form>
+
+        <br>
+
+        <p style="text-align:center;">
+
+            Don't have an account?
+
+            <a href="/signup">
+                Sign Up
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword(){
+
+    let password =
+        document.getElementById(
+            "password"
+        );
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+    }else{
+
+        password.type = "password";
+
+    }
+}
+
+</script>
+
+</body>
+
+</html>

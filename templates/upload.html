@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Energy Prediction</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="navbar">
+    <h1>Industrial Energy Forecasting Platform</h1>
+
+    <div style="margin-top:15px;">
+
+        <a href="/"
+           style="color:white;text-decoration:none;margin-right:25px;font-weight:bold;">
+            Dashboard
+        </a>
+
+        <a href="/upload"
+           style="color:white;text-decoration:none;font-weight:bold;">
+            Bulk Prediction
+        </a>
+
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>CSV Upload</h3>
+            <p>Enabled</p>
+        </div>
+
+        <div class="card">
+            <h3>Prediction Mode</h3>
+            <p>Batch</p>
+        </div>
+
+        <div class="card">
+            <h3>ML Model</h3>
+            <p>XGBoost</p>
+        </div>
+
+        <div class="card">
+            <h3>Status</h3>
+            <p>Online</p>
+        </div>
+
+    </div>
+
+    <div class="form-section">
+
+        <h2>Bulk Energy Consumption Prediction</h2>
+
+        <p style="margin-top:10px;color:#666;">
+            Upload a CSV file containing temperature, humidity,
+            and production_load columns.
+        </p>
+
+        <br>
+
+        <form method="POST"
+              enctype="multipart/form-data">
+
+            <input
+                type="file"
+                name="file"
+                accept=".csv"
+                required>
+
+            <br>
+
+            <button type="submit">
+                Upload & Predict
+            </button>
+
+        </form>
+
+    </div>
+
+    {% if tables %}
+
+    <div class="form-section">
+
+        <h2>Prediction Results</h2>
+
+        <div style="overflow-x:auto; margin-top:20px;">
+            {{ tables|safe }}
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>
